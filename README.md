@@ -29,7 +29,7 @@ POSTFIX-CALCULATOR/
     │           └── datos.txt
     └── target/
         └── classes/
-
+```
 ## Requisitos
 
 - Java 17 o superior
@@ -52,28 +52,34 @@ mvn clean install
 
 ## Compilación y Ejecución
 
-### Opción 1: Con Maven (Recomendado)
+### Opción 1
 
 1. Ve a la carpeta demo
 cd demo
 
 2. Compila el proyecto
+```
 mvn clean install
+```
 
 3. Ejecuta desde la raíz del proyecto
 cd ..
+```
 java -cp demo/target/classes org.postfix.Main
-
+```
 ### Opción 2
 
 1. Ve a la carpeta demo.
 
 2. Compila el código:
+```
 javac -d out src/main/java/org/postfix/*.java
+```
 
-3. Ejecuta el programa desde la raíz del proyecto:
+4. Ejecuta el programa desde la raíz del proyecto:
+```
 java -cp out org.postfix.Main
-
+```
 ## Archivo de Datos
 
 El programa lee expresiones desde src/main/resources/datos.txt
