@@ -19,9 +19,9 @@ public class PDFGenerator {
 
     // class to hold expression results
     public static class ExpresionResultado {
-        private String expresion;    // La expresión Postfix evaluada
-        private String resultado;     // El resultado numérico o mensaje de error
-        private boolean esError;      // true si hubo error, false si fue exitoso
+        private String expresion;
+        private String resultado;
+        private boolean esError;
         
         // Constructor
         public ExpresionResultado(String expresion, String resultado, boolean esError) {
