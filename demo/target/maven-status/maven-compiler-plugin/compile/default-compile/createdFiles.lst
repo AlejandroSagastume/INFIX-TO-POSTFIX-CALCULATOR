@@ -1,7 +1,10 @@
 org\postfix\Main.class
+org\postfix\Stacks.class
 org\postfix\PDFGenerator$ExpresionResultado.class
 org\postfix\PDFGenerator.class
 org\postfix\StackVector.class
 org\postfix\PostfixCalculator.class
 org\postfix\Stack.class
+org\postfix\StackArrayList.class
 org\postfix\Calc.class
+org\postfix\Stacks$StackType.class

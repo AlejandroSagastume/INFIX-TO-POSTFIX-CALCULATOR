@@ -1,13 +1,13 @@
 package org.postfix;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
-public class StackVector<T> implements Stack<T> {
-    private Vector<T> items;
+public class StackArrayList<T> implements Stack<T> {
+    private ArrayList<T> items;
     private int top = 0;
     
-    public StackVector() {
-        this.items = new Vector<T>();
+    public StackArrayList() {
+        this.items = new ArrayList<T>();
     }
 /**
 * Method to push an item onto the stack.
@@ -19,8 +19,7 @@ public class StackVector<T> implements Stack<T> {
     public void push(T item) {
         items.add(item);
         top++;
-}
-
+    }
 /**
 * Method to remove and return the top item from the stack.
 * @param    None
@@ -51,7 +50,7 @@ public class StackVector<T> implements Stack<T> {
         return items.get(top - 1);
     }
 
-    /**
+/**
 * Method to check if the stack is empty.
 * @param    None
 * @return   true if the stack is empty, false otherwise.

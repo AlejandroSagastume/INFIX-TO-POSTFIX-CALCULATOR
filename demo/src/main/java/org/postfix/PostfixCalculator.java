@@ -1,31 +1,35 @@
 package org.postfix;
 
 public class PostfixCalculator implements Calc {
-    // Atribute
+    // Attribute
     private Stack<Double> stack;
+    
     // Constructor
     public PostfixCalculator() {
-        this.stack = new StackVector<>();
+        this.stack = Stacks.create(); // ← CAMBIO AQUÍ: Usa Stacks
     }
-/**
-* Calculates the result of a postfix expression.
-* @param    input The postfix expression to be calculated.
-* @return   The result of the calculation.
-* @throws   IllegalArgumentException If the expression is invalid or cannot be calculated
-* @throws   ArithmeticException If division by zero occurs
-*/
+
+    /**
+     * Calculates the result of a postfix expression.
+     * @param input The postfix expression to be calculated.
+     * @return The result of the calculation.
+     * @throws IllegalArgumentException If the expression is invalid or cannot be calculated
+     * @throws ArithmeticException If division by zero occurs
+     */
     @Override
     public double calculate(String input) {
-        stack = new StackVector<>(); // clear stack
+        stack = Stacks.create();
         String[] tokens = input.trim().split("\\s+");
+        
         for (String token : tokens) {
             if (token.matches("[+\\-*/]")) {
-                if (((StackVector<Double>) stack).size() < 2) {
+                if (getStackSize() < 2) {
                     throw new IllegalArgumentException("Operandos insuficientes");
                 }
                 double b = stack.pop();
                 double a = stack.pop();
                 double resultado;
+                
                 switch (token) {
                     case "+":
                         resultado = a + b;
@@ -53,10 +57,23 @@ public class PostfixCalculator implements Calc {
             }
         }
 
-        if (((StackVector<Double>) stack).size() != 1) {
+        if (getStackSize() != 1) {
             throw new IllegalArgumentException("Expresión inválida");
         }
 
         return stack.pop();
+    }
+    
+    /**
+     * Helper method to get stack size safely
+     * @return The size of the stack
+     */
+    private int getStackSize() {
+        if (stack instanceof StackArrayList) {
+            return ((StackArrayList<Double>) stack).size();
+        } else if (stack instanceof StackVector) {
+            return ((StackVector<Double>) stack).size();
+        }
+        return 0;
     }
 }

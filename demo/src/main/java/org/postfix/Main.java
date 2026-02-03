@@ -16,6 +16,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+
+        Stacks.setDefaultType(Stacks.StackType.VECTOR); // Set default stack implementation here, can be VECTOR or ARRAYLIST
+
+        System.out.println("=== INICIANDO CALCULADORA POSTFIX ===\n");
+        System.out.println("Implementación seleccionada: " + Stacks.getDefaultType() + "\n");
+
         // Create an instance of the PostfixCalculator
         Calc calculadora = new PostfixCalculator();
         

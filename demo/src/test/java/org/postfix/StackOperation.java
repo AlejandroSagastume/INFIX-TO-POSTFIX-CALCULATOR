@@ -7,11 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class StackOperation {
-    private StackVector<Integer> stack;
+    private StackArrayList<Integer> stack;
 
     @BeforeEach
     public void setUp() {
-        stack = new StackVector<>();
+        stack = new StackArrayList<>();
     }
 
     @Test
