@@ -1,11 +1,14 @@
 # POSTFIX-CALCULATOR
 
-Calculadora de expresiones en notación Postfix (polaca inversa) desarrollada en Java.
+Calculadora de expresiones en notación Postfix desarrollada en Java.
 
 ## Descripción
 
 Este proyecto implementa:
-- **ADT Stack** (Pila genérica) usando ArrayList
+- **ADT Stack** (Pila genérica) con dos implementaciones:
+  - `StackArrayList` - Basada en ArrayList
+  - `StackVector` - Basada en Vector
+- **Clase utilitaria Stacks** - Permite cambiar fácilmente entre implementaciones
 - **Calculadora Postfix** que evalúa expresiones aritméticas
 - **Generador de reportes PDF** con iText7
 - Operadores soportados: `+`, `-`, `*`, `/`
@@ -13,7 +16,6 @@ Este proyecto implementa:
 
 ## Estructura del Proyecto
 
-```
 POSTFIX-CALCULATOR/
 ├── README.md
 ├── .gitignore
@@ -25,7 +27,9 @@ POSTFIX-CALCULATOR/
     │   │   │   └── org/postfix/
     │   │   │       ├── Calc.java
     │   │   │       ├── Stack.java
+    │   │   │       ├── StackArrayList.java
     │   │   │       ├── StackVector.java
+    │   │   │       ├── Stacks.java
     │   │   │       ├── PostfixCalculator.java
     │   │   │       ├── PDFGenerator.java
     │   │   │       └── Main.java
@@ -38,7 +42,6 @@ POSTFIX-CALCULATOR/
     │               └── StackOperation.java
     └── target/
         └── classes/
-```
 
 ## Requisitos
 
@@ -49,52 +52,72 @@ POSTFIX-CALCULATOR/
 
 ### 1. Clonar el repositorio
 
-```bash
 git clone https://github.com/mjimevm/POSTFIX-CALCULATOR
 cd POSTFIX-CALCULATOR
-```
 
 ### 2. Verificar instalación de Java
 
-```bash
 java -version
-```
 
 Debe mostrar Java 17 o superior.
 
-## 3. Instalación de Maven
+### 3. Instalación de Maven
 
-```bash
+cd demo
 mvn clean install
-```
 
 ## Compilación y Ejecución
 
-### Opción 1
+### Opción 1: Con Maven (Recomendado)
 
 1. Ve a la carpeta demo
+
 cd demo
 
 2. Compila el proyecto
-```
+
 mvn clean install
-```
 
 3. Ejecuta desde la raíz del proyecto
-cd ..
-```
-java -cp demo/target/classes org.postfix.Main
-```
-### Opción 2
 
-1. Ve a la carpeta demo.
+cd ..
+java -cp demo/target/classes org.postfix.Main
+
+### Opción 2: Sin Maven
+
+1. Ve a la carpeta demo
 
 2. Compila el código:
-```
+
 javac -d out src/main/java/org/postfix/*.java
-```
 
 **Nota:** La opción sin Maven **NO generará el PDF** porque requiere las librerías de iText7.
+
+## Cambiar Implementación de Stack
+
+El programa permite cambiar entre dos implementaciones de Stack:
+
+### Método 1: En Main.java
+
+Agrega al inicio del método main:
+
+// Para usar Vector
+Stacks.setDefaultType(Stacks.StackType.VECTOR);
+
+// Para usar ArrayList
+Stacks.setDefaultType(Stacks.StackType.ARRAYLIST);
+
+### Método 2: En Stacks.java (línea 19)
+
+// Cambiar el valor predeterminado
+private static StackType defaultType = StackType.VECTOR;    // o ARRAYLIST
+
+Después de cambiar, recompila:
+
+cd demo
+mvn clean install
+cd ..
+java -cp demo/target/classes org.postfix.Main
 
 ## Archivo de Datos
 
@@ -105,6 +128,15 @@ El programa lee expresiones desde `src/main/resources/datos.txt`
 - Una expresión por línea
 - Operadores: `+` `-` `*` `/`
 
+**Ejemplo:**
+
+1 2 + 4 * 3 +
+10 1 2 + +
+6 2 3 + *
+3 4 - 5 +
+3 4 5 * -
+10 12 12 * +
+9 10 15 1 + + +
 
 ## Reporte PDF
 
@@ -117,23 +149,19 @@ El programa genera automáticamente un archivo `reporte_postfix.pdf` en la raíz
 - **Información del curso** y autores
 
 **Ubicación del PDF generado:**
-```
+
 POSTFIX-CALCULATOR/
 └── reporte_postfix.pdf  ← Se genera aquí
-```
-
 
 ## Pruebas JUnit
 
 Ejecutar todas las pruebas:
 
-```bash
 cd demo
 mvn test
-```
 
 **Pruebas incluidas:**
-- `StackOperation.java` - Pruebas del ADT Stack
+- `StackOperation.java` - Pruebas del ADT Stack (Vector)
 - `CalculatorTest.java` - Pruebas de la calculadora Postfix
 
 ## Dependencias
@@ -145,6 +173,7 @@ El proyecto utiliza las siguientes librerías (gestionadas automáticamente por 
   - `kernel` - Núcleo de iText
   - `layout` - Diseño y formato
   - `io` - Entrada/salida
+- **SLF4J 1.7.36** - Sistema de logging (opcional, elimina warnings)
 
 ## Solución de Problemas
 
@@ -152,11 +181,8 @@ El proyecto utiliza las siguientes librerías (gestionadas automáticamente por 
 
 **Solución:** Asegúrate de compilar con Maven para descargar las dependencias de iText:
 
-```bash
 cd demo
 mvn clean install
-```
-
 
 ### El PDF no se genera
 
@@ -171,6 +197,16 @@ mvn clean install
 - **JUnit 5** - Pruebas unitarias
 - **iText7** - Generación de reportes PDF
 - **Git/GitHub** - Control de versiones
+
+## Implementaciones de Stack
+
+### StackArrayList
+- Usa `ArrayList<T>` internamente
+
+### StackVector
+- Usa `Vector<T>` internamente
+
+Ambas implementan la misma interfaz `Stack<T>`, permitiendo intercambiarlas sin modificar el código de la calculadora mediante la clase utilitaria `Stacks`.
 
 ## Autores
 
