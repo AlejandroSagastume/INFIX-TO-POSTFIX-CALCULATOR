@@ -10,18 +10,32 @@ public class PostfixCalculator implements Calc {
     @Override
     public double calculate(String input) {
         stack = new StackVector<>(); // clear stack
-        
         String[] tokens = input.trim().split("\\s+");
-        
         for (String token : tokens) {
-            if (isOperator(token)) {
+            if (token.matches("[+\\-*/]")) {
                 if (((StackVector<Double>) stack).size() < 2) {
                     throw new IllegalArgumentException("Operandos insuficientes");
                 }
-                
                 double b = stack.pop();
                 double a = stack.pop();
-                double resultado = operar(a, b, token);
+                double resultado;
+                switch (token) {
+                    case "+":
+                        resultado = a + b;
+                        break;
+                    case "-":
+                        resultado = a - b;
+                        break;
+                    case "*":
+                        resultado = a * b;
+                        break;
+                    case "/":
+                        if (b == 0) throw new ArithmeticException("División entre cero");
+                        resultado = a / b;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Operador desconocido");
+                }
                 stack.push(resultado);
             } else {
                 try {
@@ -31,27 +45,11 @@ public class PostfixCalculator implements Calc {
                 }
             }
         }
-        
+
         if (((StackVector<Double>) stack).size() != 1) {
             throw new IllegalArgumentException("Expresión inválida");
         }
-        
+
         return stack.pop();
-    }
-    
-    private boolean isOperator(String token) {
-        return token.matches("[+\\-*/]");
-    }
-    
-    private double operar(double a, double b, String op) {
-        switch (op) {
-            case "+": return a + b;
-            case "-": return a - b;
-            case "*": return a * b;
-            case "/":
-                if (b == 0) throw new ArithmeticException("División entre cero");
-                return a / b;
-            default: throw new IllegalArgumentException("Operador desconocido");
-        }
     }
 }
