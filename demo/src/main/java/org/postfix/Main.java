@@ -13,11 +13,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-        Stacks.setDefaultType(Stacks.StackType.VECTOR); // Set default stack implementation here, can be VECTOR or ARRAYLIST
+        // Change Stack type
+        System.out.println("=== ELIGE EL TIPO DE PILA ===");
+        System.out.println("1. VECTOR");
+        System.out.println("2. ARRAYLIST");
+        System.out.print("Selecciona una opción (1 o 2): ");
+        Scanner teclado = new Scanner(System.in);
+        try {
+            int opcion = teclado.nextInt();
+            switch (opcion) {
+                case 1:
+                    Stacks.setDefaultType(Stacks.StackType.VECTOR);
+                    break;
+                case 2:
+                    Stacks.setDefaultType(Stacks.StackType.ARRAYLIST);
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println("Entrada no válida, se usará VECTOR por defecto.");
+            Stacks.setDefaultType(Stacks.StackType.VECTOR);
+        }
 
         System.out.println("=== INICIANDO CALCULADORA POSTFIX ===\n");
         System.out.println("Implementación seleccionada: " + Stacks.getDefaultType() + "\n");
@@ -86,6 +105,7 @@ public class Main {
             // Close the file
             lector.close();
             archivo.close();
+            teclado.close();
             
             // GENERATE THE PDF REPORT with all the results
             System.out.println("=== GENERANDO REPORTE PDF ===\n");
