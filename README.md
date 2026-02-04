@@ -15,7 +15,7 @@ Este proyecto implementa:
 - Manejo de errores: división por cero, operandos insuficientes, caracteres inválidos
 
 ## Estructura del Proyecto
-
+``
 POSTFIX-CALCULATOR/
 ├── README.md
 ├── .gitignore
@@ -42,7 +42,7 @@ POSTFIX-CALCULATOR/
     │               └── StackOperation.java
     └── target/
         └── classes/
-
+``
 ## Requisitos
 
 - **Java 17 o superior**
@@ -51,10 +51,10 @@ POSTFIX-CALCULATOR/
 ## Instalación
 
 ### 1. Clonar el repositorio
-
+``
 git clone https://github.com/mjimevm/POSTFIX-CALCULATOR
 cd POSTFIX-CALCULATOR
-
+``
 ### 2. Verificar instalación de Java
 
 java -version
@@ -62,10 +62,10 @@ java -version
 Debe mostrar Java 17 o superior.
 
 ### 3. Instalación de Maven
-
+``
 cd demo
 mvn clean install
-
+``
 ## Compilación y Ejecución
 
 ### Opción 1: Con Maven (Recomendado)
@@ -75,22 +75,22 @@ mvn clean install
 cd demo
 
 2. Compila el proyecto
-
+``
 mvn clean install
-
+``
 3. Ejecuta desde la raíz del proyecto
-
+``
 cd ..
 java -cp demo/target/classes org.postfix.Main
-
+``
 ### Opción 2: Sin Maven
 
 1. Ve a la carpeta demo
 
 2. Compila el código:
-
+``
 javac -d out src/main/java/org/postfix/*.java
-
+``
 **Nota:** La opción sin Maven **NO generará el PDF** porque requiere las librerías de iText7.
 
 ## Cambiar Implementación de Stack
@@ -100,25 +100,26 @@ El programa permite cambiar entre dos implementaciones de Stack:
 ### Método 1: En Main.java
 
 Agrega al inicio del método main:
-
+``
 // Para usar Vector
 Stacks.setDefaultType(Stacks.StackType.VECTOR);
-
+``
+``
 // Para usar ArrayList
 Stacks.setDefaultType(Stacks.StackType.ARRAYLIST);
-
+``
 ### Método 2: En Stacks.java (línea 19)
-
+``
 // Cambiar el valor predeterminado
 private static StackType defaultType = StackType.VECTOR;    // o ARRAYLIST
-
+``
 Después de cambiar, recompila:
-
+``
 cd demo
 mvn clean install
 cd ..
 java -cp demo/target/classes org.postfix.Main
-
+``
 ## Archivo de Datos
 
 El programa lee expresiones desde `src/main/resources/datos.txt`
@@ -129,7 +130,7 @@ El programa lee expresiones desde `src/main/resources/datos.txt`
 - Operadores: `+` `-` `*` `/`
 
 **Ejemplo:**
-
+``
 1 2 + 4 * 3 +
 10 1 2 + +
 6 2 3 + *
@@ -137,7 +138,7 @@ El programa lee expresiones desde `src/main/resources/datos.txt`
 3 4 5 * -
 10 12 12 * +
 9 10 15 1 + + +
-
+``
 ## Reporte PDF
 
 El programa genera automáticamente un archivo `reporte_postfix.pdf` en la raíz del proyecto con:
