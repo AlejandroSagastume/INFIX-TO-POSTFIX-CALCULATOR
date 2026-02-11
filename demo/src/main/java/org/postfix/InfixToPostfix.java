@@ -12,7 +12,7 @@ package org.postfix;
  * @author Alejandro Sagastume, Jimena Vásquez
  * @version 2.0
  */
-public class InfixToPostfixConverter {
+public class InfixToPostfix {
     
     /**
      * Convierte una expresión INFIX a POSTFIX
@@ -30,14 +30,14 @@ public class InfixToPostfixConverter {
         infix = infix.replaceAll("\\s+", "");
         
         StringBuilder postfix = new StringBuilder();
-        IStack<Character> operatorStack = StackFactory.createStack();
+        Stack<Character> operatorStack = StackFactory.create();
         
         int i = 0;
         while (i < infix.length()) {
-            char c = infix.charAt(i);
+            char ch = infix.charAt(i);
             
             // 1. Si es un NÚMERO (puede ser multi-dígito)
-            if (Character.isDigit(c)) {
+            if (Character.isDigit(ch)) {
                 // Leer el número completo
                 StringBuilder number = new StringBuilder();
                 while (i < infix.length() && 
@@ -50,12 +50,12 @@ public class InfixToPostfixConverter {
             }
             
             // 2. Si es PARÉNTESIS IZQUIERDO '('
-            else if (c == '(') {
-                operatorStack.push(c);
+            else if (ch == '(') {
+                operatorStack.push(ch);
             }
             
             // 3. Si es PARÉNTESIS DERECHO ')'
-            else if (c == ')') {
+            else if (ch == ')') {
                 // Desapilar hasta encontrar '('
                 boolean foundOpenParen = false;
                 while (!isStackEmpty(operatorStack)) {
@@ -75,20 +75,20 @@ public class InfixToPostfixConverter {
             }
             
             // 4. Si es un OPERADOR (+, -, *, /)
-            else if (isOperator(c)) {
+            else if (isOperator(ch)) {
                 // Desapilar operadores con mayor o igual precedencia
                 while (!isStackEmpty(operatorStack) && 
                        peekStack(operatorStack) != '(' &&
-                       precedence(peekStack(operatorStack)) >= precedence(c)) {
+                       precedence(peekStack(operatorStack)) >= precedence(ch)) {
                     postfix.append(operatorStack.pop()).append(" ");
                 }
-                operatorStack.push(c);
+                operatorStack.push(ch);
             }
             
             // 5. Carácter inválido
             else {
                 throw new IllegalArgumentException(
-                    "Carácter inválido en la expresión: '" + c + "'"
+                    "Carácter inválido en la expresión: '" + ch + "'"
                 );
             }
             
@@ -149,11 +149,11 @@ public class InfixToPostfixConverter {
      * Verifica si la pila está vacía
      * (Método helper para compatibilidad con diferentes implementaciones)
      */
-    private boolean isStackEmpty(IStack<Character> stack) {
+    private boolean isStackEmpty(Stack<Character> stack) {
         try {
             stack.peek();
             return false;
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return true;
         }
     }
@@ -162,7 +162,7 @@ public class InfixToPostfixConverter {
      * Obtiene el elemento en el tope de la pila sin eliminarlo
      * (Método helper para compatibilidad)
      */
-    private char peekStack(IStack<Character> stack) {
+    private char peekStack(Stack<Character> stack) {
         return stack.peek();
     }
     
@@ -178,4 +178,4 @@ public class InfixToPostfixConverter {
             "3+4*5",               // Esperado: "3 4 5 * +"
             "(3+4)*5",             // Esperado: "3 4 + 5 *"
             "10+20*30",            // Esperado: "10 20 30 * +"
-            "2+3*4-5",             // Esperado: "2
+            "2+3*4-5",             // Esperado: "2 

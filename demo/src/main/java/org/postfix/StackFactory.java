@@ -5,8 +5,18 @@ package org.postfix;
  * Allows easy switching between different Stack implementations
  * Similar to Collections, Arrays, Objects in Java
  */
-public class Stacks {
-    
+public class StackFactory {
+    // Singleton pattern is not necessary here since we want to create multiple stacks, but we can control the default implementation type.
+    public StackType chooseStackType(int option) {
+        switch (option) {
+            case 1:
+                return StackType.ARRAYLIST;
+            case 2:
+                return StackType.VECTOR;
+            default:
+                throw new IllegalArgumentException("Opción no válida");
+        }
+    }
     /**
      * Enum to define available stack implementations
      */

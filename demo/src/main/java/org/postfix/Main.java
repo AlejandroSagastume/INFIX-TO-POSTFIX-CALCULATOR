@@ -23,23 +23,13 @@ public class Main {
         System.out.println("2. ARRAYLIST");
         System.out.print("Selecciona una opción (1 o 2): ");
         Scanner teclado = new Scanner(System.in);
-        try {
-            int opcion = teclado.nextInt();
-            switch (opcion) {
-                case 1:
-                    Stacks.setDefaultType(Stacks.StackType.VECTOR);
-                    break;
-                case 2:
-                    Stacks.setDefaultType(Stacks.StackType.ARRAYLIST);
-                    break;
-            }
-        } catch (Exception e) {
-            System.out.println("Entrada no válida, se usará VECTOR por defecto.");
-            Stacks.setDefaultType(Stacks.StackType.VECTOR);
-        }
+        int opcion = teclado.nextInt();
+        
+        StackFactory stackFactory = new StackFactory();
+        stackFactory.chooseStackType(opcion);
 
         System.out.println("=== INICIANDO CALCULADORA POSTFIX ===\n");
-        System.out.println("Implementación seleccionada: " + Stacks.getDefaultType() + "\n");
+        System.out.println("Implementación seleccionada: " + StackFactory.getDefaultType() + "\n");
 
         // Create an instance of the PostfixCalculator
         Calc calculadora = new PostfixCalculator();
