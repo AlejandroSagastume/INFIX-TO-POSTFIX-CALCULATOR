@@ -6,7 +6,7 @@ public class PostfixCalculator implements Calc {
     
     // Constructor
     public PostfixCalculator() {
-        this.stack = Stacks.create(); // ← CAMBIO AQUÍ: Usa Stacks
+        this.stack = StackFactory.create();
     }
 
     /**
@@ -18,7 +18,7 @@ public class PostfixCalculator implements Calc {
      */
     @Override
     public double calculate(String input) {
-        stack = Stacks.create();
+        stack = StackFactory.create();
         String[] tokens = input.trim().split("\\s+");
         
         for (String token : tokens) {
