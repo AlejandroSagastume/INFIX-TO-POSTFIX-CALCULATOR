@@ -178,4 +178,4 @@ public class InfixToPostfixConverter {
             "3+4*5",               // Esperado: "3 4 5 * +"
             "(3+4)*5",             // Esperado: "3 4 + 5 *"
             "10+20*30",            // Esperado: "10 20 30 * +"
-            "2+3*4-5",             // Esperado: "2 
+            "2+3*4-5",             // Esperado: "2

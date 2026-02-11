@@ -6,7 +6,7 @@ public class PostfixCalculator implements Calc {
     
     // Constructor
     public PostfixCalculator() {
-        this.stack = Stacks.create(); // ← CAMBIO AQUÍ: Usa Stacks
+        this.stack = Stacks.create();
     }
 
     /**
