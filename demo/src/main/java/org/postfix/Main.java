@@ -3,7 +3,7 @@
 * Main - Entry point for the Postfix Calculator application
 * 
 * @author Jimena Vásquez, Alejandro Sagastume
-* @version 1.0
+* @version 2.0
 */
 
 package org.postfix;
@@ -31,6 +31,9 @@ public class Main {
         System.out.println("=== INICIANDO CALCULADORA POSTFIX ===\n");
         System.out.println("Implementación seleccionada: " + StackFactory.getDefaultType() + "\n");
 
+        // Create an instance of the InfixToPostfix converter to test it
+        InfixToPostfix infixToPostfix = new InfixToPostfix();
+
         // Create an instance of the PostfixCalculator
         Calc calculadora = new PostfixCalculator();
         
@@ -48,7 +51,7 @@ public class Main {
             FileReader archivo = new FileReader(nombreArchivo);
             BufferedReader lector = new BufferedReader(archivo);
             
-            System.out.println("=== CALCULADORA POSTFIX ===\n");
+            System.out.println("=== CALCULADORA INFIX A POSTFIX ===\n");
             
             String linea;
             int numeroLinea = 1;
@@ -65,27 +68,22 @@ public class Main {
                 System.out.println("Expresion " + numeroLinea + ": " + linea);
                 
                 try {
+                    // Convert the infix expression to postfix
+                    String postfix = infixToPostfix.convert(linea);
+                    System.out.println("Postfix: " + postfix);
                     // Calculate the result of the expression
-                    double resultado = calculadora.calculate(linea);
+                    double resultado = calculadora.calculate(postfix);
                     System.out.println("Resultado: " + resultado);
                     
                     // Save the successful result for the PDF
-                    resultados.add(new PDFGenerator.ExpresionResultado(
-                        linea,
-                        String.valueOf(resultado),
-                        false
-                    ));
+                    resultados.add(new PDFGenerator.ExpresionResultado(linea, String.valueOf(resultado), false));
                     
                 } catch (Exception e) {
                     // If there is an error in calculation, display it in console
                     System.out.println("Error: " + e.getMessage());
                     
                     // Save the error for the PDF
-                    resultados.add(new PDFGenerator.ExpresionResultado(
-                        linea,
-                        "ERROR: " + e.getMessage(),
-                        true
-                    ));
+                    resultados.add(new PDFGenerator.ExpresionResultado(linea, "ERROR: " + e.getMessage(), true));
                 }
                 
                 System.out.println();

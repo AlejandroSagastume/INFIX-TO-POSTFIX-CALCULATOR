@@ -2,18 +2,8 @@ package org.postfix;
 
 /**
  * Clase para convertir expresiones aritméticas de notación INFIX a POSTFIX
- * 
- * Ejemplos:
- * - INFIX:   (10 + 20) * 9
- * - POSTFIX: 10 20 + 9 *
- * 
- * Algoritmo: Shunting Yard (Edsger Dijkstra)
- * 
- * @author Alejandro Sagastume, Jimena Vásquez
- * @version 2.0
  */
 public class InfixToPostfix {
-    
     /**
      * Convierte una expresión INFIX a POSTFIX
      * 
@@ -40,8 +30,7 @@ public class InfixToPostfix {
             if (Character.isDigit(ch)) {
                 // Leer el número completo
                 StringBuilder number = new StringBuilder();
-                while (i < infix.length() && 
-                       (Character.isDigit(infix.charAt(i)) || infix.charAt(i) == '.')) {
+                while (i < infix.length() && (Character.isDigit(infix.charAt(i)) || infix.charAt(i) == '.')) {
                     number.append(infix.charAt(i));
                     i++;
                 }
@@ -77,9 +66,7 @@ public class InfixToPostfix {
             // 4. Si es un OPERADOR (+, -, *, /)
             else if (isOperator(ch)) {
                 // Desapilar operadores con mayor o igual precedencia
-                while (!isStackEmpty(operatorStack) && 
-                       peekStack(operatorStack) != '(' &&
-                       precedence(peekStack(operatorStack)) >= precedence(ch)) {
+                while (!isStackEmpty(operatorStack) && peekStack(operatorStack) != '(' && precedence(peekStack(operatorStack)) >= precedence(ch)) {
                     postfix.append(operatorStack.pop()).append(" ");
                 }
                 operatorStack.push(ch);
@@ -87,11 +74,8 @@ public class InfixToPostfix {
             
             // 5. Carácter inválido
             else {
-                throw new IllegalArgumentException(
-                    "Carácter inválido en la expresión: '" + ch + "'"
-                );
+                throw new IllegalArgumentException("Carácter inválido en la expresión: '" + ch + "'");
             }
-            
             i++;
         }
         
@@ -148,6 +132,9 @@ public class InfixToPostfix {
     /**
      * Verifica si la pila está vacía
      * (Método helper para compatibilidad con diferentes implementaciones)
+     * 
+     * @param stack La pila a verificar
+     * @return true si la pila está vacía, false de lo contrario
      */
     private boolean isStackEmpty(Stack<Character> stack) {
         try {
@@ -161,21 +148,11 @@ public class InfixToPostfix {
     /**
      * Obtiene el elemento en el tope de la pila sin eliminarlo
      * (Método helper para compatibilidad)
+     * 
+     * @param stack La pila de la cual obtener el tope
+     * @return El carácter en el tope de la pila
      */
     private char peekStack(Stack<Character> stack) {
         return stack.peek();
     }
-    
-    /**
-     * Método de prueba rápida
-     */
-    public static void main(String[] args) {
-        InfixToPostfixConverter converter = new InfixToPostfixConverter();
-        
-        // Casos de prueba
-        String[] tests = {
-            "(10+20)*9",           // Esperado: "10 20 + 9 *"
-            "3+4*5",               // Esperado: "3 4 5 * +"
-            "(3+4)*5",             // Esperado: "3 4 + 5 *"
-            "10+20*30",            // Esperado: "10 20 30 * +"
-            "2+3*4-5",             // Esperado: "2 
+}
