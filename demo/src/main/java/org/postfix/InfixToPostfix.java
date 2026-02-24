@@ -1,158 +1,84 @@
 package org.postfix;
 
-/**
- * Clase para convertir expresiones aritméticas de notación INFIX a POSTFIX
- */
 public class InfixToPostfix {
-    /**
-     * Convierte una expresión INFIX a POSTFIX
-     * 
-     * @param infix Expresión en notación infix (ej: "(10+20)*9")
-     * @return Expresión en notación postfix (ej: "10 20 + 9 *")
-     * @throws IllegalArgumentException si la expresión es inválida
-     */
+
     public String convert(String infix) {
         if (infix == null || infix.trim().isEmpty()) {
             throw new IllegalArgumentException("La expresión está vacía");
         }
-        
-        // Eliminar espacios en blanco
+
         infix = infix.replaceAll("\\s+", "");
-        
+        Stack<Character> operatorStack =
+                StackFactory.create(StackFactory.StackType.ARRAYLIST,ListFactory.ListType.SINGLY);
+
         StringBuilder postfix = new StringBuilder();
-        Stack<Character> operatorStack = StackFactory.create();
-        
         int i = 0;
         while (i < infix.length()) {
             char ch = infix.charAt(i);
-            
-            // 1. Si es un NÚMERO (puede ser multi-dígito)
             if (Character.isDigit(ch)) {
-                // Leer el número completo
                 StringBuilder number = new StringBuilder();
-                while (i < infix.length() && (Character.isDigit(infix.charAt(i)) || infix.charAt(i) == '.')) {
+                while (i < infix.length() &&
+                        (Character.isDigit(infix.charAt(i)) || infix.charAt(i) == '.')) {
                     number.append(infix.charAt(i));
                     i++;
                 }
                 postfix.append(number).append(" ");
-                continue; // Ya incrementamos i
+                continue;
             }
-            
-            // 2. Si es PARÉNTESIS IZQUIERDO '('
-            else if (ch == '(') {
+            if (ch == '(') {
                 operatorStack.push(ch);
             }
-            
-            // 3. Si es PARÉNTESIS DERECHO ')'
+
             else if (ch == ')') {
-                // Desapilar hasta encontrar '('
-                boolean foundOpenParen = false;
-                while (!isStackEmpty(operatorStack)) {
-                    char top = operatorStack.pop();
-                    if (top == '(') {
-                        foundOpenParen = true;
-                        break;
-                    }
-                    postfix.append(top).append(" ");
+                while (!operatorStack.isEmpty() &&
+                        operatorStack.peek() != '(') {
+                    postfix.append(operatorStack.pop()).append(" ");
                 }
-                
-                if (!foundOpenParen) {
-                    throw new IllegalArgumentException(
-                        "Paréntesis desbalanceados: ')' sin '(' correspondiente"
-                    );
+                if (operatorStack.isEmpty()) {
+                    throw new IllegalArgumentException("Paréntesis desbalanceados");
                 }
+                operatorStack.pop();
             }
-            
-            // 4. Si es un OPERADOR (+, -, *, /)
+
             else if (isOperator(ch)) {
-                // Desapilar operadores con mayor o igual precedencia
-                while (!isStackEmpty(operatorStack) && peekStack(operatorStack) != '(' && precedence(peekStack(operatorStack)) >= precedence(ch)) {
+                while (!operatorStack.isEmpty() &&
+                        precedence(operatorStack.peek()) >= precedence(ch)) {
                     postfix.append(operatorStack.pop()).append(" ");
                 }
                 operatorStack.push(ch);
             }
-            
-            // 5. Carácter inválido
             else {
-                throw new IllegalArgumentException("Carácter inválido en la expresión: '" + ch + "'");
+                throw new IllegalArgumentException("Carácter inválido: " + ch);
             }
             i++;
         }
-        
-        // Vaciar la pila de operadores restantes
-        while (!isStackEmpty(operatorStack)) {
+
+        while (!operatorStack.isEmpty()) {
             char top = operatorStack.pop();
             if (top == '(') {
-                throw new IllegalArgumentException(
-                    "Paréntesis desbalanceados: '(' sin ')' correspondiente"
-                );
+                throw new IllegalArgumentException("Paréntesis desbalanceados");
             }
             postfix.append(top).append(" ");
         }
-        
-        // Eliminar espacio final
-        String result = postfix.toString().trim();
-        
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException("Expresión inválida");
-        }
-        
-        return result;
+        return postfix.toString().trim();
     }
-    
-    /**
-     * Determina si un carácter es un operador válido
-     * @param c Carácter a verificar
-     * @return true si es +, -, *, /
-     */
+
+
     private boolean isOperator(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/';
     }
-    
-    /**
-     * Retorna la precedencia de un operador
-     * Mayor número = mayor precedencia
-     * 
-     * @param operator Operador (+, -, *, /)
-     * @return Nivel de precedencia (1-2)
-     */
     private int precedence(char operator) {
         switch (operator) {
             case '+':
             case '-':
                 return 1;
+
             case '*':
             case '/':
                 return 2;
+
             default:
                 return 0;
         }
-    }
-    
-    /**
-     * Verifica si la pila está vacía
-     * (Método helper para compatibilidad con diferentes implementaciones)
-     * 
-     * @param stack La pila a verificar
-     * @return true si la pila está vacía, false de lo contrario
-     */
-    private boolean isStackEmpty(Stack<Character> stack) {
-        try {
-            stack.peek();
-            return false;
-        } catch (Exception e) {
-            return true;
-        }
-    }
-    
-    /**
-     * Obtiene el elemento en el tope de la pila sin eliminarlo
-     * (Método helper para compatibilidad)
-     * 
-     * @param stack La pila de la cual obtener el tope
-     * @return El carácter en el tope de la pila
-     */
-    private char peekStack(Stack<Character> stack) {
-        return stack.peek();
     }
 }

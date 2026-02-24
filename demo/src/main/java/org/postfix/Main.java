@@ -1,11 +1,3 @@
-/**
-*
-* Main - Entry point for the Postfix Calculator application
-* 
-* @author Jimena Vásquez, Alejandro Sagastume
-* @version 2.0
-*/
-
 package org.postfix;
 
 import java.io.BufferedReader;
@@ -16,93 +8,103 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
-        // Change Stack type
-        System.out.println("=== ELIGE EL TIPO DE PILA ===");
-        System.out.println("1. VECTOR");
-        System.out.println("2. ARRAYLIST");
-        System.out.print("Selecciona una opción (1 o 2): ");
-        Scanner teclado = new Scanner(System.in);
-        int opcion = teclado.nextInt();
-        
-        StackFactory stackFactory = new StackFactory();
-        stackFactory.chooseStackType(opcion);
 
-        System.out.println("=== INICIANDO CALCULADORA POSTFIX ===\n");
-        System.out.println("Implementación seleccionada: " + StackFactory.getDefaultType() + "\n");
+        Scanner scanner = new Scanner(System.in);
 
-        // Create an instance of the InfixToPostfix converter to test it
-        InfixToPostfix infixToPostfix = new InfixToPostfix();
+        System.out.println("===== SELECCIONAR IMPLEMENTACIÓN DE PILA =====");
+        System.out.println("1. ArrayList");
+        System.out.println("2. Vector");
+        System.out.println("3. Lista (Singly / Doubly)");
+        System.out.print("Opción: ");
 
-        // Create an instance of the PostfixCalculator
-        Calc calculadora = new PostfixCalculator();
-        
-        // Create the PDF generator
+        int option = scanner.nextInt();
+        StackFactory.StackType stackType;
+        ListFactory.ListType listType = null;
+
+        switch (option) {
+            case 1:
+                stackType = StackFactory.StackType.ARRAYLIST;
+                break;
+            case 2:
+                stackType = StackFactory.StackType.VECTOR;
+                break;
+            case 3:
+                stackType = StackFactory.StackType.LIST;
+                System.out.println("\nSeleccione tipo de lista:");
+                System.out.println("1. Simplemente enlazada");
+                System.out.println("2. Doblemente enlazada");
+                System.out.print("Opción: ");
+                int listOption = scanner.nextInt();
+                if (listOption == 1) {
+                    listType = ListFactory.ListType.SINGLY;
+                } else if (listOption == 2) {
+                    listType = ListFactory.ListType.DOUBLY;
+                } else {
+                    System.out.println("Opción inválida.");
+                    scanner.close();
+                    return;
+                }
+                break;
+            default:
+                System.out.println("Opción inválida.");
+                scanner.close();
+                return;
+        }
+        scanner.close();
+
+        InfixToPostfix converter = new InfixToPostfix();
+        PostfixCalculator calculator = PostfixCalculator.getInstance();
         PDFGenerator pdfGenerator = new PDFGenerator();
-        
-        // List to store all results (successes and errors)
         List<PDFGenerator.ExpresionResultado> resultados = new ArrayList<>();
-        
-        // Name of the input file with the expressions
-        String nombreArchivo = "src/main/resources/datos.txt";
-        
-        try {
-            // Open the file for reading
-            FileReader archivo = new FileReader(nombreArchivo);
-            BufferedReader lector = new BufferedReader(archivo);
-            
-            System.out.println("=== CALCULADORA INFIX A POSTFIX ===\n");
-            
-            String linea;
-            int numeroLinea = 1;
-            
-            // Read each line from the file
-            while ((linea = lector.readLine()) != null) {
-                
-                // Ignore empty lines
-                if (linea.trim().isEmpty()) {
+        String fileName = "src/main/resources/datos.txt";
+        System.out.println("\n===== PROCESANDO EXPRESIONES =====\n");
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            int lineNumber = 1;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) {
                     continue;
                 }
-                
-                // Display the expression in console
-                System.out.println("Expresion " + numeroLinea + ": " + linea);
-                
+                System.out.println("Expresión " + lineNumber + ": " + line);
+
                 try {
-                    // Convert the infix expression to postfix
-                    String postfix = infixToPostfix.convert(linea);
+                    String postfix = converter.convert(line);
                     System.out.println("Postfix: " + postfix);
-                    // Calculate the result of the expression
-                    double resultado = calculadora.calculate(postfix);
-                    System.out.println("Resultado: " + resultado);
-                    
-                    // Save the successful result for the PDF
-                    resultados.add(new PDFGenerator.ExpresionResultado(linea, String.valueOf(resultado), false));
-                    
+                    double result = calculator.calculate(postfix);
+                    System.out.println("Resultado: " + result);
+                    resultados.add(
+                            new PDFGenerator.ExpresionResultado(
+                                    line,
+                                    String.valueOf(result),
+                                    false
+                            )
+                    );
                 } catch (Exception e) {
-                    // If there is an error in calculation, display it in console
                     System.out.println("Error: " + e.getMessage());
-                    
-                    // Save the error for the PDF
-                    resultados.add(new PDFGenerator.ExpresionResultado(linea, "ERROR: " + e.getMessage(), true));
+                    resultados.add(
+                            new PDFGenerator.ExpresionResultado(
+                                    line,
+                                    "ERROR: " + e.getMessage(),
+                                    true
+                            )
+                    );
                 }
-                
                 System.out.println();
-                numeroLinea++;
+                lineNumber++;
             }
-            
-            // Close the file
-            lector.close();
-            archivo.close();
-            teclado.close();
-            
-            // GENERATE THE PDF REPORT with all the results
-            System.out.println("=== GENERANDO REPORTE PDF ===\n");
-            pdfGenerator.generarReporte("reporte_postfix.pdf", resultados);
-            
         } catch (IOException e) {
-            // If the file cannot be read
-            System.err.println("No se pudo leer el archivo: " + nombreArchivo);
-            System.err.println("Error: " + e.getMessage());
+            System.out.println("No se pudo leer el archivo.");
+            System.out.println(e.getMessage());
+            return;
         }
+        try {
+            pdfGenerator.generarReporte("reporte_postfix.pdf", resultados);
+        } catch (Exception e) {
+            System.out.println("Error al generar el PDF.");
+            System.out.println(e.getMessage());
+        }
+        System.out.println("\n===== FIN DEL PROGRAMA =====");
     }
 }

@@ -2,71 +2,33 @@ package org.postfix;
 
 import java.util.Vector;
 
-public class StackVector<T> implements Stack<T> {
-    private Vector<T> items;
-    private int top = 0;
-    
-    public StackVector() {
-        this.items = new Vector<T>();
-    }
-/**
-* Method to push an item onto the stack.
-* @param    item The item to be pushed onto the stack.
-* @return   void
-* @throws   None
-*/
+public class StackVector<T> extends AbstractStack<T> {
+
+    private Vector<T> items = new Vector<>();
+
     @Override
     public void push(T item) {
         items.add(item);
-        top++;
-}
+    }
 
-/**
-* Method to remove and return the top item from the stack.
-* @param    None
-* @return   The item removed from the top of the stack.
-* @throws   IllegalStateException If the stack is empty.
-*/
     @Override
     public T pop() {
         if (isEmpty()) {
             throw new IllegalStateException("Stack is empty");
         }
-        top--;
-        T item = items.get(top);
-        items.remove(top);
-        return item;
+        return items.remove(items.size() - 1);
     }
-/**
-    Method to return the top item from the stack without removing it.
-    @param None
-    @return The item at the top of the stack.
-    @throws IllegalStateException If the stack is empty.
-*/
+
     @Override
     public T peek() {
         if (isEmpty()) {
             throw new IllegalStateException("Stack is empty");
         }
-        return items.get(top - 1);
+        return items.get(items.size() - 1);
     }
 
-    /**
-* Method to check if the stack is empty.
-* @param    None
-* @return   true if the stack is empty, false otherwise.
-* @throws   None
-*/
-    public boolean isEmpty() {
-        return top == 0;
-    }
-/**
-* Method to return the number of items in the stack.
-* @param    None
-* @return   The number of items in the stack.
-* @throws   None
-*/
+    @Override
     public int size() {
-        return top;
+        return items.size();
     }
 }
