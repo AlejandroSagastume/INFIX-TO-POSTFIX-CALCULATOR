@@ -1,5 +1,8 @@
 package org.postfix;
 
+/**
+ * Clase que implementa la lista encadenada simple
+ */
 public class SinglyLinkedList<T> extends AbstractListADT<T> {
 
     private class Node {

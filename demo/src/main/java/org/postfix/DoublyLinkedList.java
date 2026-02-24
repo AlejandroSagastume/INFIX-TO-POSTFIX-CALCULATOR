@@ -1,4 +1,7 @@
 package org.postfix;
+/**
+ * Clase que implementa la lista encadenada doble
+ */
 
 public class DoublyLinkedList<T> extends AbstractListADT<T> {
 

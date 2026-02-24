@@ -1,3 +1,12 @@
+/**
+ * @file        Main.java
+ *
+ * @author      Alejandro Sagastume - Jimena Vásquez
+ * @version     2.0
+ * @brief       Esta es un programa que permite al usuario hacer cálculos con expresiones infix, convirtiéndolas a postfix y evaluándolas. El programa también genera un reporte en PDF con los resultados de cada expresión, indicando cuáles fueron exitosas y cuáles tuvieron errores.
+ * 
+*/
+
 package org.postfix;
 
 import java.io.BufferedReader;
@@ -11,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        Scanner teclado = new Scanner(System.in);
 
         System.out.println("===== SELECCIONAR IMPLEMENTACIÓN DE PILA =====");
         System.out.println("1. ArrayList");
@@ -19,7 +28,7 @@ public class Main {
         System.out.println("3. Lista (Singly / Doubly)");
         System.out.print("Opción: ");
 
-        int option = scanner.nextInt();
+        int option = teclado.nextInt();
         StackFactory.StackType stackType;
         ListFactory.ListType listType = null;
 
@@ -36,29 +45,35 @@ public class Main {
                 System.out.println("1. Simplemente enlazada");
                 System.out.println("2. Doblemente enlazada");
                 System.out.print("Opción: ");
-                int listOption = scanner.nextInt();
+                int listOption = teclado.nextInt();
                 if (listOption == 1) {
                     listType = ListFactory.ListType.SINGLY;
                 } else if (listOption == 2) {
                     listType = ListFactory.ListType.DOUBLY;
                 } else {
                     System.out.println("Opción inválida.");
-                    scanner.close();
+                    teclado.close();
                     return;
                 }
                 break;
             default:
                 System.out.println("Opción inválida.");
-                scanner.close();
+                teclado.close();
                 return;
         }
-        scanner.close();
+        teclado.close();
 
+        // Crear objeto InfixToPostfix y PostfixCalculator con la implementación seleccionada
         InfixToPostfix converter = new InfixToPostfix();
-        PostfixCalculator calculator = PostfixCalculator.getInstance();
+        PostfixCalculator calculator = PostfixCalculator.getInstance(); // Singleton: Se usa getInstance() en vez de crear el objeto directamente
+        
+        // Se crea el PDFGenerator para generar el reporte personalizado al final
         PDFGenerator pdfGenerator = new PDFGenerator();
+        
         List<PDFGenerator.ExpresionResultado> resultados = new ArrayList<>();
+        
         String fileName = "src/main/resources/datos.txt";
+        
         System.out.println("\n===== PROCESANDO EXPRESIONES =====\n");
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -75,21 +90,13 @@ public class Main {
                     double result = calculator.calculate(postfix);
                     System.out.println("Resultado: " + result);
                     resultados.add(
-                            new PDFGenerator.ExpresionResultado(
-                                    line,
-                                    String.valueOf(result),
-                                    false
+                            new PDFGenerator.ExpresionResultado(line, String.valueOf(result), false
                             )
                     );
                 } catch (Exception e) {
                     System.out.println("Error: " + e.getMessage());
                     resultados.add(
-                            new PDFGenerator.ExpresionResultado(
-                                    line,
-                                    "ERROR: " + e.getMessage(),
-                                    true
-                            )
-                    );
+                            new PDFGenerator.ExpresionResultado(line, "ERROR: " + e.getMessage(), true));
                 }
                 System.out.println();
                 lineNumber++;

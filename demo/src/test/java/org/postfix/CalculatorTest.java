@@ -11,7 +11,7 @@ public class CalculatorTest {
 
     @BeforeEach
     public void setUp() {
-        calculator = new PostfixCalculator();
+        calculator = PostfixCalculator.getInstance();
     }
 
     @Test

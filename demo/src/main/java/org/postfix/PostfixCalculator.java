@@ -6,13 +6,22 @@ public class PostfixCalculator implements Calc {
 
     private PostfixCalculator() {}
 
+    /**
+     * Patron Singleton para asegurar que solo haya una instancia de PostfixCalculator en toda la aplicación
+     * @return La instancia única de PostfixCalculator
+    */
     public static PostfixCalculator getInstance() {
         if (instance == null) {
             instance = new PostfixCalculator();
         }
         return instance;
     }
-
+    /**
+     * Calcula el resultado de una expresión en notación postfix. La expresión debe estar formada por números y operadores separados por espacios. El método utiliza una pila para evaluar la expresión, procesando cada token y aplicando las operaciones correspondientes.
+     * @param input La expresión en notación postfix a evaluar
+     * @return El resultado de la evaluación de la expresión
+     * @throws IllegalArgumentException Si la expresión es inválida 
+     */
     @Override
     public double calculate(String input) {
 

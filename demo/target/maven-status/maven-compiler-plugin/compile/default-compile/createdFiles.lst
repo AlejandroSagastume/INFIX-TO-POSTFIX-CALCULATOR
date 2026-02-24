@@ -1,11 +1,11 @@
 org\postfix\Main.class
-org\postfix\StackFactory.class
 org\postfix\PDFGenerator$ExpresionResultado.class
 org\postfix\PDFGenerator.class
 org\postfix\StackVector.class
-org\postfix\PostfixCalculator.class
-org\postfix\Stack.class
 org\postfix\StackArrayList.class
 org\postfix\StackFactory$StackType.class
-org\postfix\Calc.class
 org\postfix\InfixToPostfix.class
+org\postfix\StackFactory.class
+org\postfix\PostfixCalculator.class
+org\postfix\Stack.class
+org\postfix\Calc.class
