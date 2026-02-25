@@ -151,7 +151,7 @@ cd demo
 javac -d out src/main/java/org/postfix/*.java
 ```
 
-⚠ Nota: Sin Maven no se generará el PDF porque requiere iText7.
+Nota: Sin Maven no se generará el PDF porque requiere iText7.
 
 ---
 
@@ -226,7 +226,7 @@ Pruebas incluidas:
 - **Jimena Vásquez**
 - **Alejandro Sagastume**
 
-Curso:  
+/##Curso:  
 **CC2003 - Algoritmos y Estructura de Datos**  
 Universidad del Valle de Guatemala  
 Hoja de Trabajo No. 4
