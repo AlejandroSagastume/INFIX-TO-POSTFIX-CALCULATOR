@@ -52,7 +52,11 @@ public class PostfixCalculator implements Calc {
                 }
 
             } else {
-                stack.push(Double.parseDouble(token));
+                try {
+                    stack.push(Double.parseDouble(token));
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Carácter inválido: " + token);
+                }
             }
         }
 

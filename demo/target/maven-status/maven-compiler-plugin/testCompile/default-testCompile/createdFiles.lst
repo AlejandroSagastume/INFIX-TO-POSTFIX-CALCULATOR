@@ -1,2 +1,5 @@
+org\postfix\StackImplementationsTest.class
 org\postfix\CalculatorTest.class
+org\postfix\InfixToPostfixTest.class
+org\postfix\StackListTest.class
 org\postfix\StackOperation.class
