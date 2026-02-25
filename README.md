@@ -12,17 +12,17 @@ Este proyecto implementa:
 - - Conversión de expresiones **Infix → Postfix**
 - - Evaluación de expresiones **Postfix**
 - - **ADT Stack (Pila genérica)** con tres implementaciones:
-  - `StackArrayList` - Basada en ArrayList
-  - `StackVector` - Basada en Vector
-  - `StackList` - Basada en Lista enlazada
+    - `StackArrayList` - Basada en ArrayList
+    - `StackVector` - Basada en Vector
+    - `StackList` - Basada en Lista enlazada
 - - **ADT List (Lista genérica)** con dos implementaciones:
-  - `SinglyLinkedList` - Lista simplemente enlazada
-  - `DoublyLinkedList` - Lista doblemente enlazada
+    - `SinglyLinkedList` - Lista simplemente enlazada
+    - `DoublyLinkedList` - Lista doblemente enlazada
 - - Patrón de diseño **Factory**
-  - `StackFactory`
-  - `ListFactory`
+    - `StackFactory`
+    - `ListFactory`
 - - Patrón de diseño **Singleton**
-  - `PostfixCalculator`
+    - `PostfixCalculator`
 - - Generador de reportes PDF con iText7
 - - Pruebas unitarias con JUnit 5
 
