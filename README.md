@@ -228,7 +228,7 @@ Pruebas incluidas:
 
 ---
 
-##Curso:  
+## Curso:  
 **CC2003 - Algoritmos y Estructura de Datos**  
 Universidad del Valle de Guatemala  
 Hoja de Trabajo No. 4
